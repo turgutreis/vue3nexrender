@@ -1,0 +1,32 @@
+{
+  "name": "vuetify-project",
+  "version": "0.0.0",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mdi/font": "5.9.55",
+    "@videojs-player/vue": "^1.0.0",
+    "axios": "^1.2.0",
+    "roboto-fontface": "*",
+    "socket.io-client": "^4.5.3",
+    "video.js": "^7.20.3",
+    "vue": "^3.2.38",
+    "vue-3-socket.io": "^1.0.5",
+    "vue-axios": "^3.5.2",
+    "vue-socket.io": "^3.0.10",
+    "vue-socket.io-extended": "^4.2.0",
+    "vue-toasted": "^1.1.28",
+    "vue3-json-viewer": "^2.2.2",
+    "vuetify": "^3.0.0",
+    "webfontloader": "^1.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.3",
+    "vite": "^3.1.8",
+    "vite-plugin-vuetify": "^1.0.0-alpha.12"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "vue-formular-server",
+  "version": "1.0.0",
+  "description": "NodeJS Backend for vue-formular",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest",
+    "api"
+  ],
+  "author": "alimazlum",
+  "license": "ISC",
+  "dependencies": {
+    "@nexrender/server": "^1.39.8",
+    "@nexrender/worker": "^1.39.8",
+    "aws-sdk": "^2.1257.0",
+    "basic-ftp": "^5.0.2",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "file-system": "^2.2.2",
+    "ftp-srv": "^4.6.2",
+    "glob": "^8.0.3",
+    "handbrake-js": "^6.0.0",
+    "multer": "^1.4.5-lts.1",
+    "nanoid": "^3.1.22",
+    "node-localstorage": "^2.2.1",
+    "pg": "^8.6.0",
+    "shelljs": "^0.8.5",
+    "socket.io": "^4.5.2",
+    "ws": "^8.10.0"
+  }
+}

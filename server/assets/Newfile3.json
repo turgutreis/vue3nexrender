@@ -1,0 +1,23 @@
+{
+    "template": {
+        "src": "file:///c:/nexrender/ntvde_zitat_fuer_thomas.aep",
+        "composition": "ntvde_zitat_fuer_thomas 2"
+    },
+    "assets": [
+        {
+            "type": "data",
+            "layerName": "ZITAT",
+            "property": "Source Text",
+            "value": "Hier steht der Zitattext! Cool"
+        }
+    ],
+    "actions": {
+        "postrender": [
+            {
+                "module": "@nexrender/action-encode",
+                "output": "c:/nexrender/cat.mp4",
+                "preset": "mp4"
+            }
+        ]
+    }
+}
