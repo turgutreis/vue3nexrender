@@ -16,30 +16,41 @@ module.exports = async (job, settings, options, type) => {
     if (!path.isAbsolute(output)) output = path.join(job.workpath, output);
     console.log("input: ", input);
     console.log("Output: ", output);
-    hbjs
-      .spawn({ input: input, output: output })
-      .on("error", (err) => {
-        // invalid user input, no video found etc
-      })
-      .on("progress", (progress) => {
-        // socket.emit("sendProgress", progress.percentComplete);
-        // getAttachments(progress.percentComplete);
-        console.log("Percent complete: %s", progress.percentComplete);
-      })
-      .on("complete", (complete) => {
-        if (options.eraseInput) {
-          settings.logger.log(
-            `[${job.uid}] [action-handbrake] erasing input ${input}`
-          );
-          fs.unlinkSync(input);
-        }
+    let renderData = {
+      renderInput: input,
+      renderOutput: output,
+    };
+    if (typeof localStorage === "undefined" || localStorage === null) {
+      var LocalStorage = require("node-localstorage").LocalStorage;
+      localStorage = new LocalStorage("./scratch");
+    }
 
-        settings.logger.log(
-          `[${job.uid}] [action-handbrake] encoding complete`
-        );
+    const data = JSON.stringify(renderData, null, 4);
+    localStorage.setItem("inputOutput", data);
+    // hbjs
+    //   .spawn({ input: input, output: output })
+    //   .on("error", (err) => {
+    //     // invalid user input, no video found etc
+    //   })
+    //   .on("progress", (progress) => {
+    //     // socket.emit("sendProgress", progress.percentComplete);
+    //     // getAttachments(progress.percentComplete);
+    //     console.log("Percent complete: %s", progress.percentComplete);
+    //   })
+    //   .on("complete", (complete) => {
+    //     if (options.eraseInput) {
+    //       settings.logger.log(
+    //         `[${job.uid}] [action-handbrake] erasing input ${input}`
+    //       );
+    //       fs.unlinkSync(input);
+    //     }
 
-        resolve(job);
-      });
+    //     settings.logger.log(
+    //       `[${job.uid}] [action-handbrake] encoding complete`
+    //     );
+
+    //     resolve(job);
+    //   });
 
     // console.log("Input: ", action.input);
     // console.log("Output: ", action.output);

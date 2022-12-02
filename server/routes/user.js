@@ -36,9 +36,16 @@ getSocketConnection.ioConnection.on("connection", (socket) => {
   const client = createClient({
     host: "http://localhost:3050",
     secret: "myapisecret",
+    polling: 3000,
   });
 
-  socket.on("startPreRender", function (msg) {
+  // const client2 = createClient({
+  //   host: "http://localhost:3050",
+  //   secret: "myapisecret",
+  //   polling: 3000,
+  // });
+
+  socket.on("startPreview", function (msg) {
     console.log(msg);
     const main = async () => {
       const result = await client.addJob({
@@ -63,12 +70,19 @@ getSocketConnection.ioConnection.on("connection", (socket) => {
         },
         onRenderProgress: (job, value) => console.log("JERRY"),
       });
-      result.on(
-        "created",
-        (job) => {
-          socket.emit("projectCreated", "created");
-        }
-      );
+      result.on("created", (job) => {
+        socket.emit("projectCreated", "created");
+      });
+      result.on("started", (job) => {
+        socket.emit("sendStarted", "started");
+      });
+      result.on("progress", (job, percents) => {
+        socket.emit("sendRendering", percents);
+      });
+      result.on("finished", (job) => {
+        socket.emit("sendFinished", "finish");
+      });
+      result.on("error", (err) => console.log("project rendering error", err));
     };
     main().catch(console.error);
   });
@@ -76,48 +90,30 @@ getSocketConnection.ioConnection.on("connection", (socket) => {
   //   var LocalStorage = require("node-localstorage").LocalStorage;
   //   localStorage = new LocalStorage("./scratch");
   // }
-
-  const main = async () => {
-    const serverHost = "http://localhost:3050";
-    const serverSecret = "myapisecret";
-
-    socket.on("startRender", async function () {
-      await start(serverHost, serverSecret, {
-        workpath: "/Users/mazlum/.nexrender/",
-        binary: "/Users/mazlum/Applications/aerender",
-        skipCleanup: true,
-        addLicense: false,
-        debug: true,
-        actions: {
-          "custom-action": (job, settings, { input, params }, type) => {
-            // Custom action code
-          },
-        },
+  socket.on("startRender", async function () {
+    const regex = /\.mp4/i;
+    let input = JSON.parse(localStorage.getItem("inputOutput")).renderInput;
+    let output = JSON.parse(localStorage.getItem("inputOutput")).renderOutput;
+    let newOutput = output.replace(regex, "_final.mp4");
+    hbjs
+      .spawn({
+        input: input,
+        output: newOutput,
+      })
+      .on("error", (err) => {
+        // invalid user input, no video found etc
+      })
+      .on("progress", (progress) => {
+        socket.emit("sendProgress", progress.percentComplete.toFixed());
+      })
+      .on("complete", (complete) => {
+        socket.emit("completeProgress", "complete");
+        // }
       });
-    });
-  };
+  });
 
-  main().catch(console.error);
+  // main().catch(console.error);
 
-  // const regex = /\.mp4/i;
-  // let input = JSON.parse(localStorage.getItem("inputOutput")).renderInput;
-  // let output = JSON.parse(localStorage.getItem("inputOutput")).renderOutput;
-  // let newOutput = output.replace(regex, "_final.mp4");
-  // hbjs
-  //   .spawn({
-  //     input: input,
-  //     output: newOutput,
-  //   })
-  //   .on("error", (err) => {
-  //     // invalid user input, no video found etc
-  //   })
-  //   .on("progress", (progress) => {
-  //     socket.emit("sendProgress", progress.percentComplete.toFixed());
-  //   })
-  //   .on("complete", (complete) => {
-  //     socket.emit("completeProgress", "complete");
-  //     // }
-  //   });
   socket.on("sendVideoName", function (msg) {
     const logo = path.resolve("../../videos/" + msg);
     socket.emit("sendSelectedVideo", logo);

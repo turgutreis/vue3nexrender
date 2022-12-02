@@ -4,6 +4,7 @@
 const config = require("./config/websocket");
 let user = require("./routes/user");
 let test = require("./mymodule/index");
+const { start } = require("@nexrender/worker");
 // const ftp = require("basic-ftp") 
 // const app = express();
 
@@ -104,27 +105,26 @@ config.app.get("/", (req, res) => {
 //   result.on("error", (err) => console.log("project rendering error", err));
 // };
 
-// const main = async () => {
-//   const serverHost = "http://localhost:3050";
-//   const serverSecret = "myapisecret";
+const main = async () => {
+  const serverHost = "http://localhost:3050";
+  const serverSecret = "myapisecret";
 
-//   await start(serverHost, serverSecret, {
-//     workpath: "/Users/mazlum/.nexrender/",
-//     binary: "/Users/mazlum/Applications/aerender",
-//     skipCleanup: true,
-//     addLicense: false,
-//     debug: true,
-//     actions: {
-//       "custom-action": (job, settings, { input, params }, type) => {
-//         // Custom action code
-//       },
-//     },
-//   });
-// };
+  await start(serverHost, serverSecret, {
+    workpath: "/Users/mazlum/.nexrender/",
+    binary: "/Users/mazlum/Applications/aerender",
+    skipCleanup: true,
+    addLicense: false,
+    debug: true,
+    actions: {
+      "custom-action": (job, settings, { input, params }, type) => {
+        // Custom action code
+      },
+    },
+  });
+};
 
-// main().catch(console.error);
+main().catch(console.error);
 
-// main().catch(console.error);
 
 // set port, listen for requests
 // server.listen(port, secret, () => {

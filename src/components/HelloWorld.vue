@@ -215,7 +215,8 @@ export default {
         .then((res) => (this.jobs = res.data));
     },
     FinishJob(val) {
-      console.log(val);
+      console.log(val)
+      this.$socket.emit("startfinalRender", val);
     },
     sendFinished(val) {
       console.log(val);
@@ -248,16 +249,16 @@ export default {
   },
   methods: {
     previewRender() {
+      // let jsonJob = {
+      //   data: this.jsonData,
+      //   outputName: this.outputFileName,
+      // };
+      // this.jobQueue.push(jsonJob);
+      // console.log(this.jobQueue);
+      // localStorage.setItem("queueJobs", JSON.stringify(this.jobQueue));
       // Object.assign(this.jsonData.template, { frameStart: 100, frameEnd: 500 });
       // console.log(this.jsonData.template);
-      let jsonJob = {
-        data: this.jsonData,
-        outputName: this.outputFileName,
-      };
-      this.jobQueue.push(jsonJob);
-      console.log(this.jobQueue);
-      localStorage.setItem("queueJobs", JSON.stringify(this.jobQueue));
-      this.$socket.emit("startPreRender", {
+      this.$socket.emit("startPreview", {
         data: this.jsonData,
         outputName: this.outputFileName,
       });
@@ -266,6 +267,15 @@ export default {
     updateJob() {},
     startRenderJob() {
       // console.log(this.jsonData);
+      // let originalJob = JSON.parse(localStorage.getItem("queueJobs"));
+      // console.log(
+      //   originalJob.find(
+      //     (element) => element.outputName === this.outputFileName
+      //   )
+      // );
+      // let jobObj = originalJob.find(
+      //   (element) => element.outputName === this.outputFileName
+      // );
       this.$socket.emit("startRender");
       this.loading = true;
     },
