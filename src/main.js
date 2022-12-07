@@ -18,6 +18,7 @@ import "video.js/dist/video-js.css";
 import VueSocketIO from "vue-3-socket.io";
 import SocketIO from "socket.io-client";
 import JsonViewer from "vue3-json-viewer";
+import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
@@ -32,4 +33,4 @@ app.use(VueAxios, axios)
 app.use(JsonViewer);
 registerPlugins(app);
 app.use(VueVideoPlayer);
-app.use(vuetify).mount("#app");
+app.use(vuetify).use(router).mount("#app");

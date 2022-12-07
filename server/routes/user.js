@@ -6,12 +6,11 @@ const hbjs = require("handbrake-js");
 const { start } = require("@nexrender/worker");
 const getSocketConnection = require("../config/websocket");
 const { createClient } = require("@nexrender/api");
-// const { createHandler } = require("@nexrender/server");
 var path = require("path");
 var fs = require("fs");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./assets");
+    cb(null, "../../NexRender/");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -21,10 +20,25 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 /* eslint-disable prettier/prettier */
 
+router.post("/upload", upload.single("file"), function (req, res) {
+  console.log(req.file);
+  // req.file is the `avatar` fil
+  // req.body will hold the text fields, if there were any
+  res.json({ message: "Successfully uploaded file" });
+});
+
 getSocketConnection.ioConnection.on("connection", (socket) => {
   var files = fs.readdirSync("../../NexRender");
   console.log("client connected");
   socket.emit("sendFiles", files);
+  socket.on("uploadedJsonFile", function (msg) {
+    fs.readFile("../../NexRender/" + msg, "utf8", function read(err, data) {
+      if (err) {
+        throw err;
+      }
+      socket.emit("senduploadedFile", data);
+    });
+  });
   socket.on("selectedFile", function (msg) {
     fs.readFile("../../NexRender/" + msg, "utf8", function read(err, data) {
       if (err) {

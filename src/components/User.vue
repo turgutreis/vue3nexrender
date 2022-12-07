@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <v-card class="d-flex justify-center" flat>
+    <v-card class="d-flex justify-center">
       <v-card title="Image Preview" class="pa-2">
         <v-img
           lazy-src="https://picsum.photos/id/11/10/6"
@@ -11,7 +11,6 @@
           max-width="400"
           :src="imgUpload"
         ></v-img>
-        <!-- <v-btn class="mt-2" color="primary">Bild hochladen</v-btn> -->
         <v-select
           v-model="select"
           outlined
