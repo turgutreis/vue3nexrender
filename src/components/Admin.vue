@@ -27,8 +27,9 @@
       <v-card width="300" title="File Input" flat>
         <v-card-actions>
           <v-file-input
-            accept="image/*"
             variant="solo"
+            v-model="afterEffect"
+            @update:modelValue="uploadAEProject"
             label="Upload After Effects Project"
           ></v-file-input>
         </v-card-actions>
@@ -51,6 +52,7 @@ const BASE_URL = "http://localhost:3030";
 export default {
   data: () => ({
     jsonData: [],
+    afterEffect: [],
     items: [],
     jobQueue: [],
     file: [],
@@ -87,7 +89,26 @@ export default {
         this.axios
           .post(`${BASE_URL}/user/upload`, FileData, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((resp) => {
+            console.log(resp.data);
+          });
+      } catch (err) {
+        console.error(err);
+        return;
+      }
+    },
+    uploadAEProject() {
+      console.log(this.afterEffect);
+      const FileData = new FormData();
+      FileData.append("file", this.afterEffect[0]);
+      try {
+        this.axios
+          .post(`${BASE_URL}/user/upload`, FileData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
             },
           })
           .then((resp) => {
@@ -110,14 +131,14 @@ export default {
       //     postrender: [],
       //   },
       // };
-      console.log(this.jsonData[0])
+      console.log(this.jsonData);
       const FileData = new FormData();
       FileData.append("file", this.jsonData[0]);
       try {
         this.axios
           .post(`${BASE_URL}/user/upload`, FileData, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+              "Content-Type": "multipart/form-data",
             },
           })
           .then((resp) => {
@@ -127,7 +148,6 @@ export default {
         console.error(err);
         return;
       }
-      //   this.filename = val.replaceAll(".json", "");
     },
   },
 };
