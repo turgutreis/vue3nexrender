@@ -18,9 +18,11 @@ import "video.js/dist/video-js.css";
 import VueSocketIO from "vue-3-socket.io";
 import SocketIO from "socket.io-client";
 import JsonViewer from "vue3-json-viewer";
-import router from './router'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import router from "./router";
+import axios from "axios";
+import Toast from "vue-toastification";
+import VueAxios from "vue-axios";
+import "vue-toastification/dist/index.css";
 
 const app = createApp(App);
 app.use(
@@ -29,7 +31,13 @@ app.use(
     connection: SocketIO("http://localhost:3030"),
   })
 );
-app.use(VueAxios, axios)
+
+const options = {
+  // You can set your default options here
+};
+
+app.use(Toast, options);
+app.use(VueAxios, axios);
 app.use(JsonViewer);
 registerPlugins(app);
 app.use(VueVideoPlayer);

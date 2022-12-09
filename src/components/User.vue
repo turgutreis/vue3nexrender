@@ -143,13 +143,21 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
 export default {
-  // setup() {
-  //   const { socket } = useSocketIO();
-  //   socket.on("welcome", () => {
-  //     console.log("welcome");
-  //   });
-  // },
+  setup() {
+    //const { socket } = useSocketIO();
+    //socket.on("welcome", () => {
+    //  console.log("welcome");
+    //});
+
+      // Get toast interface
+      const toast = useToast();
+      // These options will override the options defined in the "app.use" plugin registration for this specific toast
+
+      // Make it available inside methods
+      return { toast }
+  },
   data: () => ({
     jsonData: {},
     items: [],
@@ -212,16 +220,19 @@ export default {
           },
         })
         .then((res) => (this.jobs = res.data));
+        this.toast.success(val);
     },
     FinishJob(val) {
       console.log(val)
       this.$socket.emit("startfinalRender", val);
+      this.toast.success(val);
     },
     sendFinished(val) {
       console.log(val);
       this.loadingPreview = false;
       this.valid = false;
       this.source = "/" + this.outputFileName + ".mp4";
+      this.toast.success(val);
     },
     sendStarted(val) {
       console.log(val);
@@ -229,6 +240,7 @@ export default {
     completeProgress(val) {
       console.log(val);
       this.loading = false;
+      this.toast.success(val);
     },
     sendSelectedFile(val) {
       this.jsonData = JSON.parse(val);
@@ -255,7 +267,7 @@ export default {
       // this.jobQueue.push(jsonJob);
       // console.log(this.jobQueue);
       // localStorage.setItem("queueJobs", JSON.stringify(this.jobQueue));
-      // Object.assign(this.jsonData.template, { frameStart: 100, frameEnd: 500 });
+      // Object.assign(this.jsonData.template, { frameStart: 0, frameEnd: 300 });
       // console.log(this.jsonData.template);
       this.$socket.emit("startPreview", {
         data: this.jsonData,
