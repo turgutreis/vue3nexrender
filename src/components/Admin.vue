@@ -80,26 +80,6 @@ export default {
     },
   },
   methods: {
-    uploadImage(val) {
-      if (this.file === null) return;
-      console.log(this.file);
-      const FileData = new FormData();
-      FileData.append("file", this.file);
-      try {
-        this.axios
-          .post(`${BASE_URL}/user/upload`, FileData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((resp) => {
-            console.log(resp.data);
-          });
-      } catch (err) {
-        console.error(err);
-        return;
-      }
-    },
     uploadAEProject() {
       console.log(this.afterEffect);
       const FileData = new FormData();

@@ -3,14 +3,14 @@ var express = require("express");
 var router = express.Router();
 var multer = require("multer");
 const hbjs = require("handbrake-js");
-const { start } = require("@nexrender/worker");
+// const { start } = require("@nexrender/worker");
 const getSocketConnection = require("../config/websocket");
 const { createClient } = require("@nexrender/api");
 var path = require("path");
 var fs = require("fs");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../../NexRender/");
+    cb(null, "./assets");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -29,8 +29,10 @@ router.post("/upload", upload.single("file"), function (req, res) {
 
 getSocketConnection.ioConnection.on("connection", (socket) => {
   var files = fs.readdirSync("../../NexRender");
+  var files2 = fs.readdirSync("./assets");
   console.log("client connected");
   socket.emit("sendFiles", files);
+   socket.emit("sendAEFiles", files2);
   socket.on("uploadedJsonFile", function (msg) {
     fs.readFile("../../NexRender/" + msg, "utf8", function read(err, data) {
       if (err) {

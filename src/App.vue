@@ -6,8 +6,10 @@
           <!-- <font-awesome-icon class="fa-2xl" icon="seedling" /> -->
           <span class="ml-2">Vue-Render</span>
           <nav>
-            <router-link to="/">Home</router-link> |
-            <router-link to="/admin">Admin</router-link> |
+            <v-btn color="" variant="tonal"> <router-link to="/">Home</router-link> </v-btn>
+            <v-btn variant="tonal">
+              <router-link to="/admin">Admin</router-link>
+            </v-btn>
           </nav>
         </div>
         <v-spacer></v-spacer>

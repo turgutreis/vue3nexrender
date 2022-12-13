@@ -12,6 +12,15 @@
           :src="imgUpload"
         ></v-img>
         <v-select
+          v-model="selectae"
+          outlined
+          :items="itemsAE"
+          @update:modelValue="getAEProject"
+          :rules="[(v) => !!v || 'Item is required']"
+          label="AE Projekt"
+          required
+        ></v-select>
+        <v-select
           v-model="select"
           outlined
           :items="items"
@@ -161,6 +170,7 @@ export default {
   data: () => ({
     jsonData: {},
     items: [],
+    itemsAE: [],
     jobQueue: [],
     skill: 0,
     source: "",
@@ -173,6 +183,7 @@ export default {
     loadingPreview: false,
     outputFileName: "",
     select: null,
+    selectae: null,
     bars: [
       { class: "" },
       { class: "", dark: true },
@@ -207,6 +218,10 @@ export default {
     sendFiles(val) {
       console.log(val);
       this.items = val;
+    },
+    sendAEFiles(val) {
+      console.log(val);
+      this.itemsAE = val;
     },
     sendRendering(val) {
       console.log(val);
@@ -289,6 +304,10 @@ export default {
       // );
       this.$socket.emit("startRender");
       this.loading = true;
+    },
+    getAEProject() {
+      console.log(this.selectae)
+      console.log(this.jsonData.template)
     },
     getJsonData(val) {
       console.log(val);
