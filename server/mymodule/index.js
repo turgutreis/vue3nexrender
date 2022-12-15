@@ -22,28 +22,28 @@ module.exports = async (job, settings, options, type) => {
 
     const data = JSON.stringify(renderData, null, 4);
     localStorage.setItem("inputOutput", data);
-    hbjs
-      .spawn({ input: input, output: output, preset: "Very Fast 480p30" })
-      .on("error", (err) => {
-        // invalid user input, no video found etc
-      })
-      .on("progress", (progress) => {
-        console.log("Percent complete: %s", progress.percentComplete);
-      })
-      .on("complete", (complete) => {
-        if (options.eraseInput) {
-          settings.logger.log(
-            `[${job.uid}] [action-handbrake] erasing input ${input}`
-          );
-          fs.unlinkSync(input);
-        }
+    // hbjs
+    //   .spawn({ input: input, output: output, preset: "Very Fast 480p30" })
+    //   .on("error", (err) => {
+    //     // invalid user input, no video found etc
+    //   })
+    //   .on("progress", (progress) => {
+    //     console.log("Percent complete: %s", progress.percentComplete);
+    //   })
+    //   .on("complete", (complete) => {
+    //     if (options.eraseInput) {
+    //       settings.logger.log(
+    //         `[${job.uid}] [action-handbrake] erasing input ${input}`
+    //       );
+    //       fs.unlinkSync(input);
+    //     }
 
-        settings.logger.log(
-          `[${job.uid}] [action-handbrake] encoding complete`
-        );
+    //     settings.logger.log(
+    //       `[${job.uid}] [action-handbrake] encoding complete`
+    //     );
 
-        resolve(job);
-      });
+    //     resolve(job);
+    //   });
 
     // console.log("Input: ", action.input);
     // console.log("Output: ", action.output);

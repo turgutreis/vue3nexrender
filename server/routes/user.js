@@ -32,7 +32,12 @@ getSocketConnection.ioConnection.on("connection", (socket) => {
   var files2 = fs.readdirSync("./assets");
   console.log("client connected");
   socket.emit("sendFiles", files);
-   socket.emit("sendAEFiles", files2);
+  socket.emit("sendAEFiles", files2);
+  socket.on("getPath", function (msg) {
+    const localPath = path.resolve("./assets/" + msg);
+    console.log(localPath);
+    socket.emit("sendPath", localPath);
+  });
   socket.on("uploadedJsonFile", function (msg) {
     fs.readFile("../../NexRender/" + msg, "utf8", function read(err, data) {
       if (err) {
@@ -81,9 +86,7 @@ getSocketConnection.ioConnection.on("connection", (socket) => {
             },
           ],
         },
-        onChange: (job, state) => {
-          console.log("TEST");
-        },
+        onChange: (job, state) => console.log("das"),
         onRenderProgress: (job, value) => console.log("JERRY"),
       });
       result.on("created", (job) => {

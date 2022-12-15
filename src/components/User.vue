@@ -12,15 +12,6 @@
           :src="imgUpload"
         ></v-img>
         <v-select
-          v-model="selectae"
-          outlined
-          :items="itemsAE"
-          @update:modelValue="getAEProject"
-          :rules="[(v) => !!v || 'Item is required']"
-          label="AE Projekt"
-          required
-        ></v-select>
-        <v-select
           v-model="select"
           outlined
           :items="items"
@@ -29,6 +20,22 @@
           label="Datei wählen"
           required
         ></v-select>
+        <v-select
+          v-model="selectae"
+          outlined
+          :items="itemsAE"
+          @update:modelValue="getAEProject"
+          :rules="[(v) => !!v || 'Item is required']"
+          label="AE Projekt"
+          required
+        ></v-select>
+        <v-text-field
+          v-if="Object.keys(jsonData).length !== 0"
+          v-model="jsonData.template.composition"
+          label="Composition"
+          solo
+          required
+        ></v-text-field>
         <v-file-input
           accept="image/*"
           v-model="image"
@@ -41,7 +48,7 @@
         <v-card-text>
           <div v-for="(val, i) in jsonData.assets" :key="i">
             <v-text-field
-              v-if="val.layerName === 'NAME'"
+              v-if="val.layerName === 'NAME' || val.layerName === 'Headline'"
               v-model="val.value"
               label="Headline"
               solo
@@ -49,13 +56,15 @@
             ></v-text-field>
             <v-textarea
               solo
-              v-if="val.layerName === 'ZITAT'"
+              v-if="val.layerName === 'ZITAT' || val.layerName === 'Zitat'"
               v-model="val.value"
               name="input-7-4"
               label="Zitat eingeben"
             ></v-textarea>
             <v-text-field
-              v-if="val.layerName === 'FUNKTION'"
+              v-if="
+                val.layerName === 'FUNKTION' || val.layerName === 'Background'
+              "
               label="Output Name"
               v-model="outputFileName"
               solo
@@ -160,12 +169,12 @@ export default {
     //  console.log("welcome");
     //});
 
-      // Get toast interface
-      const toast = useToast();
-      // These options will override the options defined in the "app.use" plugin registration for this specific toast
+    // Get toast interface
+    const toast = useToast();
+    // These options will override the options defined in the "app.use" plugin registration for this specific toast
 
-      // Make it available inside methods
-      return { toast }
+    // Make it available inside methods
+    return { toast };
   },
   data: () => ({
     jsonData: {},
@@ -223,6 +232,11 @@ export default {
       console.log(val);
       this.itemsAE = val;
     },
+    sendPath(val) {
+      console.log("TEST");
+      this.jsonData.template.src = "file:///" + val;
+      console.log(this.jsonData.template);
+    },
     sendRendering(val) {
       console.log(val);
     },
@@ -235,10 +249,10 @@ export default {
           },
         })
         .then((res) => (this.jobs = res.data));
-        this.toast.success(val);
+      this.toast.success(val);
     },
     FinishJob(val) {
-      console.log(val)
+      console.log(val);
       this.$socket.emit("startfinalRender", val);
       this.toast.success(val);
     },
@@ -251,10 +265,12 @@ export default {
     },
     sendStarted(val) {
       console.log(val);
+      this.loadingPreview = false;
     },
     completeProgress(val) {
       console.log(val);
       this.loading = false;
+      this.source = "/" + this.outputFileName + "_final.mp4";
       this.toast.success(val);
     },
     sendSelectedFile(val) {
@@ -306,8 +322,9 @@ export default {
       this.loading = true;
     },
     getAEProject() {
-      console.log(this.selectae)
-      console.log(this.jsonData.template)
+      this.$socket.emit("getPath", this.selectae);
+      // this.jsonData.template.src = this.selectae
+      // console.log(this.jsonData.template.src)
     },
     getJsonData(val) {
       console.log(val);
