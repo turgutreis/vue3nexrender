@@ -76,7 +76,7 @@
             :loading="loadingPreview"
             @click="previewRender"
             color="primary"
-            >Add To Job Queue</v-btn
+            >Start Render</v-btn
           >
         </v-card-text>
       </v-card>
@@ -110,7 +110,7 @@
             <strong>{{ Math.ceil(value) }}%</strong>
           </template>
         </v-progress-linear>
-        <v-btn
+        <!-- <v-btn
           class="mt-2"
           :loading="loading"
           depressed
@@ -119,7 +119,7 @@
           :disabled="valid"
         >
           Start Render
-        </v-btn>
+        </v-btn> -->
       </v-card>
       <v-col cols="2">
         <v-card title="Job Queue">
@@ -258,19 +258,21 @@ export default {
     },
     sendFinished(val) {
       console.log(val);
-      this.loadingPreview = false;
       this.valid = false;
       this.source = "/" + this.outputFileName + ".mp4";
       this.toast.success(val);
     },
+    sendBegin(val) {
+      this.toast.success(val);
+    },
     sendStarted(val) {
-      console.log(val);
-      this.loadingPreview = false;
+      this.toast.success(val);
     },
     completeProgress(val) {
       console.log(val);
       this.loading = false;
-      this.source = "/" + this.outputFileName + "_final.mp4";
+      this.loadingPreview = false;
+      this.source = "/" + this.outputFileName + ".mp4";
       this.toast.success(val);
     },
     sendSelectedFile(val) {

@@ -5,7 +5,7 @@ const config = require("./config/websocket");
 let user = require("./routes/user");
 let test = require("./mymodule/index");
 const { start } = require("@nexrender/worker");
-// const ftp = require("basic-ftp") 
+// const ftp = require("basic-ftp")
 // const app = express();
 
 config.app.use((req, res, next) => {
@@ -116,15 +116,14 @@ const main = async () => {
     addLicense: false,
     debug: true,
     actions: {
-      "custom-action": (job, settings, { input, params }, type) => {
-        // Custom action code
+      testFunktion: (job, settings, options, type) => {
+        console.log("TEST", job, settings, options, type);
       },
     },
   });
 };
 
 main().catch(console.error);
-
 
 // set port, listen for requests
 // server.listen(port, secret, () => {
